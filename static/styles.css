@@ -1,0 +1,624 @@
+/* ═══ Design system aligned to the Import Payment Portal ═══ */
+:root {
+  --teal-dark: #0B4A46;
+  --teal: #106661;
+  --navy: #0D2B3A;
+  --bg: #f1f5f9;
+  --card: #ffffff;
+  --ink: #1A2530;
+  --muted: #64748b;
+  --line: #e8edf2;
+  --primary: #0B4A46;
+  --primary-dark: #083733;
+  --green: #15803d;
+  --amber: #854d0e;
+  --red: #b91c1c;
+  --blue: #1d4ed8;
+  --shadow: 0 1px 4px rgba(0, 0, 0, .06);
+}
+
+* { box-sizing: border-box; }
+input, select, textarea, button { font-family: inherit; }
+
+/* Stop the whole PAGE from scrolling sideways (which would slide content out
+   from under the fixed top bar + sidebar). We use position:fixed (not sticky)
+   for those bars, so overflow-x:hidden here is safe. Wide tables scroll inside
+   their own .table-scroll boxes. */
+html, body { max-width: 100%; overflow-x: hidden; }
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.005em;
+}
+
+/* NOTE: no CSS `zoom` here — zoom breaks position:sticky/fixed for the
+   top bar and sidebar (they scrolled out of view). Sizing is controlled by
+   the individual font-size/padding values instead. */
+
+/* ── Navbar (payment-portal style) — enlarged for readability ── */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px; padding: 8px 28px; background: #fff;
+  border-bottom: 1px solid var(--line);
+  /* Fixed to the viewport so it's always visible while scrolling. */
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06); flex-wrap: nowrap; gap: 10px;
+}
+.brand { display: flex; align-items: center; gap: 14px; font-weight: 700; }
+.brand-mark {
+  width: 38px; height: 38px; border-radius: 9px;
+  background: linear-gradient(135deg, var(--navy), var(--teal-dark));
+  color: #fff; font-weight: 700; font-size: 17px;
+  display: flex; align-items: center; justify-content: center;
+}
+.brand h1 { font-size: 20px; margin: 0; font-weight: 700; }
+.brand-tag {
+  font-size: 15px; color: var(--ink); font-weight: 600;
+  border-left: 1px solid var(--line); padding-left: 14px; margin-left: 4px;
+  display: flex; flex-direction: column; line-height: 1.2;
+}
+.brand-tagline { font-size: 10px; color: var(--muted); font-weight: 500; letter-spacing: .01em; margin-top: 1px; }
+.subtitle { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+
+.badge {
+  display: inline-flex; align-items: center;
+  font-size: 12px; padding: 4px 12px; border-radius: 999px; font-weight: 600;
+}
+.badge-muted { background: #eef1f6; color: var(--muted); }
+.badge-ok { background: #dcfce7; color: var(--green); }
+.badge-bad { background: #fee2e2; color: var(--red); }
+
+/* ── Page container ── */
+.wrap { max-width: 1500px; width: 100%; margin: 0 auto; padding: 16px 18px; display: grid; gap: 14px; }
+
+.card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow);
+}
+.card h2 { margin: 0 0 10px; font-size: 13px; font-weight: 700; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.file-field { grid-column: 1 / -1; }
+label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #475569; font-weight: 600; }
+.req-star { color: var(--red); font-weight: 700; }
+input[type="text"], input[type="file"], input[type="date"], select, textarea {
+  border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px;
+  font-size: 13px; color: var(--ink); background: #fff;
+}
+input[type="text"]:focus, input[type="date"]:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--teal); box-shadow: 0 0 0 3px rgba(16,102,97,.12);
+}
+
+/* ── Buttons ── */
+.actions { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: none; border-radius: 8px; padding: 8px 16px; font-size: 13px;
+  font-weight: 600; cursor: pointer; transition: .15s;
+}
+.btn-primary { background: var(--teal-dark); color: #fff; }
+.btn-primary:hover:not(:disabled) { background: var(--primary-dark); }
+.btn-ghost, .btn-secondary { background: #fff; color: #334155; border: 1px solid var(--line); }
+.btn-ghost:hover, .btn-secondary:hover { background: #f8fafc; }
+.btn-success { background: #16a34a; color: #fff; }
+.btn-danger { background: #dc2626; color: #fff; }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.message { margin: 14px 0 0; font-size: 13px; min-height: 18px; }
+.message.error { color: var(--red); }
+.message.ok { color: var(--green); }
+
+.summary-head { display: flex; align-items: center; justify-content: space-between; }
+.vendor-line { color: var(--muted); font-size: 14px; margin: 4px 0 18px; }
+
+/* ── Stat tiles ── */
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; }
+.stat {
+  border: 1px solid var(--line); border-radius: 14px; padding: 18px;
+  background: #fff;
+}
+.stat .label { font-size: 12px; color: var(--muted); font-weight: 600; }
+.stat .value { font-size: 26px; font-weight: 800; margin-top: 2px; color: var(--teal-dark); }
+/* Reconciliation worksheet table — larger & more readable */
+.recon-ws { width: 100%; max-width: 860px; border: 1px solid var(--line); border-collapse: collapse; font-size: 11.5px; }
+.recon-ws td { border: 1px solid var(--line); padding: 5px 11px; white-space: normal; }
+.recon-ws .ws-bold td { font-weight: 700; background: #f8fafc; font-size: 11.5px; }
+.recon-ws .ws-head td { font-weight: 700; background: #E7F2EF; color: var(--teal-dark); font-size: 10.5px; text-transform: uppercase; letter-spacing: .02em; }
+.recon-ws .ws-indent td:first-child, .recon-ws td.ws-indent { padding-left: 32px; }
+.recon-ws .ws-blank td { border-left: none; border-right: none; height: 10px; padding: 0; background: #fff; }
+.recon-ws .ws-cnt { color: var(--muted); font-weight: 500; font-size: 13px; }
+.recon-ws .ws-subtotal { font-weight: 700; }
+.recon-ws .ws-click { cursor: pointer; }
+.recon-ws .ws-click:hover td { background: #f3f9f8; }
+.recon-ws .ws-active td { background: #E7F2EF; }
+.recon-ws .num { font-variant-numeric: tabular-nums; }
+.recon-ws .ws-vendor-name { text-align: right; font-weight: 700; color: var(--teal-dark); }
+.recon-ws .ws-vendor-meta { text-align: right; }
+.recon-ws .ws-reqid { font-family: "Consolas", monospace; font-weight: 700; color: var(--primary); font-size: 10px; }
+.recon-ws .ws-rundate { color: var(--muted); font-size: 9.5px; margin-top: 1px; }
+.recon-ws .ws-meta td { font-weight: 600; color: #475569; }
+
+/* Open-item / detail tables — slightly larger for readability */
+#histDetailHost table { font-size: 11px; }
+#histDetailHost th { font-size: 9px; padding: 7px 10px; }
+#histDetailHost td { padding: 7px 10px; }
+
+/* ── History page: extra-compact fonts (scoped so the rest of the app is
+      unaffected) ── */
+#page-history .card h2 { font-size: 12px; }
+#page-history table { font-size: 10px; }
+#page-history th { font-size: 8.5px; padding: 5px 8px; }
+#page-history td { padding: 5px 8px; }
+#page-history .recon-ws { font-size: 10.5px; }
+#page-history .recon-ws td { padding: 4px 10px; }
+#page-history .recon-ws .ws-bold td { font-size: 10.5px; }
+#page-history .recon-ws .ws-head td { font-size: 9.5px; }
+#page-history .recon-ws .ws-cnt { font-size: 9.5px; }
+#page-history #histDetailHost table { font-size: 10px; }
+#page-history #histDetailHost th { font-size: 8.5px; padding: 5px 8px; }
+#page-history #histDetailHost td { padding: 5px 8px; }
+
+/* ── Reconciliation DETAIL page (#page-reconDetail): compact so the wide
+      Open-Items table (10 cols incl. Comments) fits the screen ── */
+#page-reconDetail .card h2 { font-size: 13px; }
+#page-reconDetail #histDetailLine, #page-reconDetail .vendor-line { font-size: 11px; }
+#page-reconDetail .recon-ws { font-size: 10.5px; }
+#page-reconDetail .recon-ws td { padding: 4px 10px; }
+#page-reconDetail .recon-ws .ws-bold td { font-size: 10.5px; }
+#page-reconDetail .recon-ws .ws-head td { font-size: 9.5px; }
+#page-reconDetail .stat-amt { font-size: 10.5px; }
+
+/* Open-items detail table: shrink + wrap so every column (through Comments) is visible */
+#page-reconDetail #histDetailHost { overflow-x: hidden; }
+#page-reconDetail #histDetailHost table { font-size: 9px; table-layout: fixed; width: 100%; }
+#page-reconDetail #histDetailHost th { font-size: 8px; padding: 4px 5px; white-space: normal; word-break: break-word; overflow-wrap: anywhere; }
+#page-reconDetail #histDetailHost td { font-size: 9px; padding: 4px 5px; white-space: normal; word-break: break-word; overflow-wrap: anywhere; }
+#page-reconDetail #histDetailHost .st-pill { font-size: 8px; padding: 2px 5px; white-space: normal; }
+#page-reconDetail #histDetailHost .btn-sm { font-size: 8px; padding: 2px 5px; }
+#page-reconDetail #histDetailHost .oop-tag { font-size: 7px; padding: 1px 3px; }
+#page-reconDetail #histDetailHost .res-note { font-size: 8px; }
+/* 10 columns: Status, Rule, SAP Doc, SAP Date, Vendor Ref, Vendor Date,
+   SAP Amt, Vendor Amt, Diff, Comments */
+#page-reconDetail #histDetailHost th:nth-child(1),  #page-reconDetail #histDetailHost td:nth-child(1)  { width: 12%; } /* Status */
+#page-reconDetail #histDetailHost th:nth-child(2),  #page-reconDetail #histDetailHost td:nth-child(2)  { width: 15%; } /* Rule */
+#page-reconDetail #histDetailHost th:nth-child(3),  #page-reconDetail #histDetailHost td:nth-child(3)  { width: 9%;  } /* SAP Doc */
+#page-reconDetail #histDetailHost th:nth-child(4),  #page-reconDetail #histDetailHost td:nth-child(4)  { width: 8%;  } /* SAP Date */
+#page-reconDetail #histDetailHost th:nth-child(5),  #page-reconDetail #histDetailHost td:nth-child(5)  { width: 9%;  } /* Vendor Ref */
+#page-reconDetail #histDetailHost th:nth-child(6),  #page-reconDetail #histDetailHost td:nth-child(6)  { width: 8%;  } /* Vendor Date */
+#page-reconDetail #histDetailHost th:nth-child(7),  #page-reconDetail #histDetailHost td:nth-child(7)  { width: 10%; } /* SAP Amt */
+#page-reconDetail #histDetailHost th:nth-child(8),  #page-reconDetail #histDetailHost td:nth-child(8)  { width: 10%; } /* Vendor Amt */
+#page-reconDetail #histDetailHost th:nth-child(9),  #page-reconDetail #histDetailHost td:nth-child(9)  { width: 7%;  } /* Diff */
+#page-reconDetail #histDetailHost th:nth-child(10), #page-reconDetail #histDetailHost td:nth-child(10) { width: 12%; } /* Comments */
+#page-history #histDetailLine, #page-history .vendor-line { font-size: 11px; }
+#page-history .stat-amt { font-size: 10.5px; }
+#page-history .hist-filters label { font-size: 10px; }
+
+/* History LIST table (#histHost): make all 12 columns fit the card width so
+   nothing (Net Diff / View) gets cut off. */
+/* #histHost is itself the .table-scroll box; don't let it scroll/clip
+   horizontally — the fixed-layout table below is sized to fit exactly. */
+#histHost { overflow-x: hidden; }
+#histHost table { width: 100%; table-layout: fixed; }
+#histHost th, #histHost td { padding: 5px 6px; white-space: normal; word-break: break-word; overflow-wrap: anywhere; }
+#histHost .badge { white-space: normal; padding: 2px 7px; font-size: 8.5px; line-height: 1.3; }
+#histHost th.num, #histHost td.num { font-variant-numeric: tabular-nums; }
+#histHost .hist-view-btn { font-size: 10px; padding: 2px 4px; }
+#histHost .req-id { font-family: "Consolas", monospace; font-weight: 700; color: var(--primary); font-size: 9.5px; }
+#histHost .req-id-date { color: var(--muted); font-size: 9px; margin-top: 1px; }
+/* Column widths (13 cols): give text columns more room, numbers less. */
+#histHost th:nth-child(1),  #histHost td:nth-child(1)  { width: 12%; } /* Request ID */
+#histHost th:nth-child(2),  #histHost td:nth-child(2)  { width: 9%;  } /* Date & Time */
+#histHost td.hist-datetime { white-space: nowrap; color: var(--muted); font-size: 9.5px; }
+#histHost th:nth-child(3),  #histHost td:nth-child(3)  { width: 6%;  } /* Vendor */
+#histHost th:nth-child(4),  #histHost td:nth-child(4)  { width: 9%;  } /* Vendor Name */
+#histHost th:nth-child(5),  #histHost td:nth-child(5)  { width: 7%;  } /* SAP Records */
+#histHost th:nth-child(6),  #histHost td:nth-child(6)  { width: 7%;  } /* Vendor Records */
+#histHost th:nth-child(7),  #histHost td:nth-child(7)  { width: 7%;  } /* Match */
+#histHost th:nth-child(8),  #histHost td:nth-child(8)  { width: 7%;  } /* Mismatch */
+#histHost th:nth-child(9),  #histHost td:nth-child(9)  { width: 7%;  } /* Miss SAP */
+#histHost th:nth-child(10), #histHost td:nth-child(10) { width: 7%;  } /* Miss Vendor */
+#histHost th:nth-child(11), #histHost td:nth-child(11) { width: 7%;  } /* Possibly Match */
+#histHost th:nth-child(12), #histHost td:nth-child(12) { width: 10%; } /* Net Diff */
+#histHost th:nth-child(13), #histHost td:nth-child(13) { width: 5%;  } /* View */
+/* Keep the Net Diff amount on one line and right-aligned so it stays tidy. */
+#histHost td:nth-child(12) { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 9.5px; }
+
+.balance-summary { grid-template-columns: repeat(3, 1fr); max-width: 760px; }
+.stat.big { padding: 22px; }
+.stat.big .label { font-size: 13px; }
+.stat.big .value { font-size: 30px; }
+.stat-group-label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; margin: 16px 0 8px; }
+.stat-group-label:first-child { margin-top: 4px; }
+.stat-amt { font-size: 13px; font-weight: 700; color: var(--teal-dark); margin-top: 4px; font-variant-numeric: tabular-nums; }
+/* Open-item resolution + out-of-period flags */
+tr.row-resolved td { opacity: .55; background: #f0fdf4; }
+tr.row-oop td { background: #fff7ed; }
+.res-note { font-size: 11px; color: var(--green); font-weight: 600; margin-top: 2px; }
+.oop-cell { color: #c2410c; font-weight: 600; }
+.oop-tag { display: inline-block; font-size: 9px; font-weight: 700; color: #fff; background: #c2410c;
+  border-radius: 4px; padding: 1px 5px; margin-left: 4px; text-transform: uppercase; letter-spacing: .03em; }
+
+.stat-clickable { cursor: pointer; transition: .15s; }
+.stat-clickable:hover { border-color: var(--teal-dark); background: #f3f9f8; }
+.stat-active { border-color: var(--teal-dark); box-shadow: 0 0 0 2px rgba(11,74,70,.2); background: #E7F2EF; }
+.stat.green .value { color: var(--green); }
+.stat.amber .value { color: var(--amber); }
+.stat.red .value { color: var(--red); }
+.stat.blue .value { color: var(--blue); }
+
+.warnings { margin-top: 14px; }
+.warn { background: #fef9c3; border: 1px solid #fde68a; color: #854d0e;
+  padding: 8px 12px; border-radius: 8px; font-size: 13px; margin-top: 8px; }
+
+/* ── Tabs ── */
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.tab {
+  border: 1px solid var(--line); background: #fff; border-radius: 8px;
+  padding: 7px 15px; font-size: 13px; font-weight: 600; color: #334155; cursor: pointer;
+}
+.tab.active { background: var(--teal-dark); color: #fff; border-color: var(--teal-dark); }
+.table-card { margin-top: 14px; padding: 0; overflow: hidden; }
+
+/* ── Tables (payment-portal style) ── */
+table { width: 100%; border-collapse: collapse; font-size: 11px; }
+thead tr { background: #f8fafc; }
+th {
+  padding: 6px 9px; text-align: left; font-size: 9px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; border-bottom: 1px solid var(--line); white-space: nowrap; position: sticky; top: 0;
+}
+td { padding: 6px 9px; border-bottom: 1px solid #f1f5f9; color: #334155; white-space: nowrap; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: #f8fafc; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+td.diff-pos { color: var(--red); font-weight: 600; }
+td.diff-neg { color: var(--green); font-weight: 600; }
+.empty { padding: 40px; text-align: center; color: #94a3b8; }
+
+.hidden { display: none !important; }
+
+/* ═══════════════ LOGIN (Firmway-style split layout) ═══════════════ */
+#login-page {
+  min-height: 100vh;
+  display: flex;
+  /* Teal gradient spans the FULL screen, behind both panels. */
+  background: linear-gradient(150deg, #0D2B3A 0%, #0B4A46 55%, #083733 100%);
+  position: relative;
+  overflow: hidden;
+}
+/* Decorative glow across the whole backdrop. */
+#login-page::after {
+  content: "";
+  position: absolute; right: -160px; bottom: -160px;
+  width: 520px; height: 520px; border-radius: 50%;
+  background: radial-gradient(circle at center, rgba(26,163,154,.30), transparent 68%);
+  pointer-events: none;
+}
+
+/* Left brand panel — transparent (shares the page's full-screen gradient) */
+.login-brand-panel {
+  flex: 1 1 48%;
+  background: transparent;
+  color: #fff;
+  padding: 56px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+/* Footer line pinned to the bottom while the main copy stays centered. */
+.login-brand-panel .lbp-foot { position: absolute; bottom: 36px; left: 60px; right: 60px; }
+.lbp-logo { position: relative; z-index: 1; }
+.emcure-logo-svg { height: 76px; width: auto; display: block; }
+.emcure-logo-light { height: 66px; }
+/* Round Emcure logo image on the login brand panel. */
+.lbp-logo-img { height: 110px; width: 110px; border-radius: 50%; object-fit: cover; display: block; box-shadow: 0 8px 26px -10px rgba(0,0,0,.4); background: #fff; }
+.lbp-brand-line { margin-top: 18px; display: flex; align-items: baseline; flex-wrap: wrap; }
+.lbp-brand-name { font-size: 26px; font-weight: 800; color: #ffffff; }
+.lbp-brand-sep { font-size: 26px; font-weight: 800; color: #7fe3d9; margin: 0 1px; }
+.lbp-brand-sub { font-size: 22px; font-weight: 700; color: #cfe6e3; }
+.lbp-brand-tag { margin-top: 6px; font-size: 15px; color: #9fc4bf; font-weight: 500; }
+
+.lbp-copy { position: relative; z-index: 1; max-width: 560px; margin-top: -240px; }
+.lbp-title { font-size: 46px; line-height: 1.15; font-weight: 800; margin: 0 0 18px; }
+.lbp-sub { font-size: 20px; line-height: 1.6; color: #cfe6e3; margin: 0 0 30px; }
+.lbp-points { list-style: none; padding: 0; margin: 0; display: grid; gap: 34px; }
+.lbp-points li {
+  position: relative; padding-left: 32px; font-size: 18px; color: #e6f2f0; line-height: 1.5;
+}
+.lbp-points li::before {
+  content: "\2713"; position: absolute; left: 0; top: 1px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: rgba(26,163,154,.3); color: #7fe3d9;
+  display: grid; place-items: center; font-size: 11px; font-weight: 700;
+}
+.lbp-foot { position: relative; z-index: 1; font-size: 14px; color: #9fc4bf; margin: 0; }
+
+/* Right form panel — card aligned to the right, enlarged */
+.login-form-panel {
+  flex: 1 1 52%;
+  display: flex; align-items: center; justify-content: flex-end;
+  padding: 40px 6vw 40px 24px;
+  position: relative; z-index: 1;
+}
+.login-card {
+  background: #fff; border-radius: 16px; box-shadow: 0 10px 40px -12px rgba(20,30,60,.18);
+  border: 1px solid #E9ECEF; width: 100%; max-width: 420px; padding: 22px 34px 32px;
+}
+.login-card-logo { text-align: center; margin-bottom: 10px; margin-top: 0; }
+.login-card-logo-img { height: 104px; width: 104px; border-radius: 50%; object-fit: cover; display: inline-block; box-shadow: 0 6px 20px -8px rgba(0,0,0,.3); }
+.lcl-name { margin-top: 8px; font-size: 19px; font-weight: 800; color: var(--teal-dark); line-height: 1.1; }
+.lcl-sep { font-size: 14px; font-weight: 800; color: #94a3b8; line-height: 1; }
+.lcl-sub { font-size: 15px; font-weight: 700; color: #334155; line-height: 1.2; }
+.lcl-tag { margin-top: 3px; font-size: 11px; color: #6b7488; font-weight: 500; }
+.login-card-head { margin-bottom: 18px; text-align: center; }
+.login-heading { font-size: 23px; font-weight: 800; color: #1b2437; margin: 0 0 6px; }
+.login-subheading { font-size: 16px; color: #6b7488; margin: 0; }
+
+.login-error {
+  display: none; background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B;
+  border-radius: 8px; padding: 10px 14px; font-size: 13px; margin-bottom: 16px;
+}
+
+.form-group { margin-bottom: 15px; }
+.login-label { display: block; font-size: 13px; font-weight: 600; color: #212529; margin-bottom: 6px; }
+.pwd-wrap { position: relative; }
+.login-input {
+  width: 100%; padding: 11px 14px; font-size: 14px; border: 1px solid #ced4da;
+  border-radius: 9px; color: #1e293b; outline: none; background: #fff; transition: border .2s, box-shadow .2s;
+}
+.pwd-wrap .login-input { padding-right: 42px; }
+.login-input:focus { border-color: #106661; box-shadow: 0 0 0 3px rgba(16,102,97,.12); }
+.pwd-eye { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #6C757D; font-size: 17px; }
+
+.login-options {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 2px 0 18px; font-size: 13px;
+}
+.remember { display: flex; align-items: center; gap: 7px; color: #4b5468; font-weight: 500; cursor: pointer; }
+.remember input { width: 15px; height: 15px; accent-color: #0B4A46; cursor: pointer; }
+.forgot-link { color: #0B4A46; font-weight: 600; text-decoration: none; }
+.forgot-link:hover { text-decoration: underline; }
+
+.login-btn {
+  width: 100%; background: #0B4A46; border: none; color: #fff; font-weight: 700;
+  padding: 12px; border-radius: 9px; font-size: 15px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; transition: background .15s;
+}
+.login-btn:hover { background: #083733; }
+
+.login-divider {
+  display: flex; align-items: center; text-align: center;
+  color: #9aa2b1; font-size: 12px; margin: 20px 0;
+}
+.login-divider::before, .login-divider::after {
+  content: ""; flex: 1; height: 1px; background: #e3e8f0;
+}
+.login-divider span { padding: 0 14px; }
+
+.sso-btn {
+  width: 100%; background: #fff; border: 1px solid #ced4da; color: #1b2437;
+  font-weight: 600; padding: 12px; border-radius: 9px; font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .15s, border .15s;
+}
+.sso-btn:hover { background: #f4f6fb; border-color: #0B4A46; }
+.sso-ico { font-size: 15px; }
+
+.login-foot { text-align: center; margin: 22px 0 0; font-size: 11px; color: #8a93a6; font-weight: 500; }
+
+@media (max-width: 860px) {
+  #login-page { flex-direction: column; }
+  .login-brand-panel { flex: none; padding: 36px 28px; }
+  .lbp-copy { max-width: none; }
+  .lbp-title { font-size: 26px; }
+  .lbp-points { display: none; }
+  .login-form-panel { flex: 1; padding: 28px 20px; }
+}
+
+/* ═══════════════ Navbar user area ═══════════════ */
+/* ── Navbar user area (payment-portal style) ── */
+.nav-user { display: flex; align-items: center; gap: 14px; }
+.role-badge, .user-name {
+  font-size: 15px; font-weight: 600; color: var(--ink);
+}
+.user-avatar {
+  width: 34px; height: 34px; background: var(--teal-dark); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 15px;
+}
+
+/* Scrollable table with sticky header */
+.table-scroll { max-height: 520px; overflow: auto; border: 1px solid var(--line); border-radius: 12px; }
+.table-scroll table tfoot td { background: #f8fafc; border-top: 2px solid var(--line); position: sticky; bottom: 0; }
+
+/* ── Body layout: left vertical sidebar + main content ── */
+.body-layout {
+  display: flex; align-items: flex-start;
+  /* Teal gradient backdrop for the app content area (matches login). */
+  background: linear-gradient(150deg, #0D2B3A 0%, #0B4A46 55%, #083733 100%);
+  /* Clear the fixed top bar (60px) and reserve the left column for the
+     fixed sidebar (210px). */
+  padding-top: 60px;
+  margin-left: 210px;
+  min-height: 100vh;
+  /* Keep content within the available width; wide tables scroll inside their
+     own .table-scroll boxes, not by widening the whole layout. */
+  overflow-x: hidden;
+}
+.sidenav {
+  /* Fixed to the left edge, below the top bar — always visible on scroll. */
+  position: fixed; top: 60px; left: 0; bottom: 0;
+  width: 210px; z-index: 90;
+  background: #fff; border-right: 1px solid var(--line);
+  overflow-y: auto;
+}
+.sidenav .sidenav-inner {
+  padding: 16px 12px; display: flex; flex-direction: column; gap: 8px;
+}
+/* min-width:0 lets this flex column shrink below its content width so wide
+   tables stay inside their .table-scroll box instead of widening the page. */
+.body-layout .wrap { flex: 1 1 auto; min-width: 0; max-width: none; margin: 0; }
+
+/* Vertical nav buttons (stacked below the logo, on the left) */
+.sidenav .nav-tab {
+  display: block; width: 100%; text-align: left;
+  background: #fff; color: #334155; border: 1px solid var(--line);
+  font-size: 14px; font-weight: 600; padding: 11px 16px; border-radius: 10px;
+  cursor: pointer; transition: .15s;
+}
+.sidenav .nav-tab:hover { background: #f8fafc; }
+.sidenav .nav-tab.active { background: var(--teal-dark); color: #fff; border-color: var(--teal-dark); }
+
+.topbar .nav-user .btn { font-size: 14px; padding: 8px 16px; }
+.topbar .badge { font-size: 13px; padding: 5px 12px; }
+
+@media (max-width: 760px) {
+  .body-layout { flex-direction: column; margin-left: 0; }
+  .sidenav { position: static; top: auto; bottom: auto; width: 100%; border-right: none; border-bottom: 1px solid var(--line); overflow: visible; }
+  .sidenav .sidenav-inner { flex-direction: row; flex-wrap: wrap; }
+  .sidenav .nav-tab { width: auto; }
+}
+
+/* legacy home button (kept harmless if referenced) */
+.home-btn { display: none; }
+
+/* ── Landing page tiles (payment-portal .tile style) ── */
+.home-hero { text-align: center; margin: 10px 0 4px; padding-top: 10px; }
+.home-title { font-size: 24px; font-weight: 800; color: #ffffff; margin: 0 0 4px; }
+.home-sub { font-size: 14px; color: #cfe6e3; margin: 0; }
+.home-cards {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px; max-width: 1000px; margin: 18px auto 0; width: 100%;
+}
+.home-card {
+  background: #fff; border: 2px solid var(--line); border-radius: 16px;
+  padding: 32px 20px; text-align: center; cursor: pointer; transition: .2s;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.home-card:hover { border-color: var(--teal-dark); background: #E7F2EF; transform: translateY(-3px); }
+.hc-ico {
+  width: 56px; height: 56px; border-radius: 16px; display: grid; place-items: center;
+  background: #E7F2EF; font-size: 26px; margin-bottom: 6px;
+}
+.hc-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+.hc-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+/* Data Upload — compact input area */
+#page-vendorData .form-grid { grid-template-columns: 220px 160px 160px; }
+
+/* Data Upload — Single / Multiple mode tabs */
+.vmode-tabs { display: inline-flex; gap: 4px; background: #eef1f6; border-radius: 10px; padding: 4px; margin-bottom: 10px; }
+.vmode-tab {
+  border: none; background: none; padding: 7px 18px; border-radius: 8px; font-size: 13px;
+  font-weight: 600; color: var(--muted); cursor: pointer; transition: .15s;
+}
+.vmode-tab.active { background: #fff; color: var(--primary); box-shadow: 0 1px 2px rgba(20,30,60,.1); }
+
+/* Single mode — one normal input */
+.svx-single { max-width: 260px; }
+.svx-single input.vrow-code {
+  width: 100%; border: 1px solid var(--line); border-radius: 7px; padding: 9px 11px;
+  font-size: 14px; color: var(--ink); background: #fff;
+}
+
+/* Multiple mode — SAP-style "Single value" grid */
+.svx-grid {
+  display: inline-block; border: 1px solid #b9c2d0; border-radius: 4px; overflow: hidden;
+  background: #fff; min-width: 240px;
+}
+.svx-head {
+  background: #eef1f6; border-bottom: 1px solid #b9c2d0; padding: 6px 10px;
+  font-size: 12px; font-weight: 700; color: var(--ink);
+}
+.svx-body { max-height: 420px; overflow: auto; }
+.svx-row { display: flex; align-items: stretch; border-bottom: 1px solid #e3e8f0; }
+.svx-row:last-child { border-bottom: none; }
+.svx-num {
+  width: 30px; flex: none; background: #f7f9fc; border-right: 1px solid #e3e8f0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--muted); font-weight: 600;
+}
+.svx-row input.vrow-code {
+  flex: 1; border: none; padding: 7px 10px; font-size: 13px; color: var(--ink);
+  background: #fff; outline: none;
+}
+.svx-row input.vrow-code:focus { background: #f3f9f8; box-shadow: inset 0 0 0 2px rgba(11,74,70,.25); }
+
+.vrow-code:focus { outline: none; }
+.req-id { font-family: "Consolas", monospace; font-size: 12px; color: var(--primary); font-weight: 600; white-space: nowrap; }
+
+/* Shared batch Request ID banner */
+.reqid-banner {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+  background: linear-gradient(135deg, #0B4A46 0%, #083733 100%); color: #fff;
+  border-radius: 12px; padding: 16px 22px; margin-bottom: 16px;
+}
+.reqid-banner-label { font-size: 12px; color: #a7d3cd; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+.reqid-banner-id { font-family: "Consolas", monospace; font-size: 22px; font-weight: 800; margin-top: 2px; }
+.reqid-banner-meta { display: flex; flex-wrap: wrap; gap: 18px; font-size: 13px; }
+.reqid-banner-meta span { display: block; font-size: 11px; color: #a7d3cd; font-weight: 600; }
+
+/* Page containers */
+.page { display: grid; gap: 20px; }
+.page.hidden { display: none; }
+
+/* Template page */
+.tpl-intro { font-size: 14px; color: var(--muted); margin: 0 0 18px; line-height: 1.5; }
+.tpl-h3 { font-size: 14px; margin: 0 0 10px; }
+.tpl-note { font-size: 13px; color: var(--muted); margin: 14px 0 0; line-height: 1.5; }
+code { background: #f1f5f9; border-radius: 5px; padding: 1px 6px; font-size: 12px; color: #0B4A46; }
+
+/* ═══════════════ Reconciliation history ═══════════════ */
+.hist-filters { display: flex; align-items: flex-end; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+.hist-filters label { flex-direction: column; font-size: 12px; color: var(--muted); font-weight: 600; }
+.hist-filters input[type="date"] {
+  border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; font-size: 14px; color: var(--ink);
+}
+.hist-view-btn {
+  border: none; background: none; color: var(--primary); font-weight: 600; cursor: pointer;
+  font-size: 13px; padding: 2px 6px; text-decoration: underline;
+}
+.net-zero { color: var(--green); font-weight: 600; }
+.net-diff { color: var(--red); font-weight: 600; }
+
+/* ═══════════════ Transaction reconciliation ═══════════════ */
+.tpl-divider { border: none; border-top: 1px solid var(--line); margin: 26px 0 4px; }
+.badge-ok { background: #e3f5ea; color: var(--green); }
+.badge-bad { background: #fdecec; color: var(--red); }
+
+/* History type badges */
+.badge-txn { background: #ede9fe; color: #6d28d9; }
+.badge-cb { background: #e0f2fe; color: #0369a1; }
+
+/* ═══════════════ Engine settings ═══════════════ */
+.cfg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.cfg-grid label { flex-direction: column; font-size: 12px; color: var(--muted); font-weight: 600; gap: 6px; }
+.cfg-grid input {
+  border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; font-size: 14px; color: var(--ink);
+}
+.cfg-toggles { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+.cfg-toggle {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border: 1px solid var(--line); border-radius: 9px; font-size: 13px; color: var(--ink); font-weight: 600;
+}
+.cfg-toggle input { width: 16px; height: 16px; }
+
+/* Engine result status pills */
+.st-pill { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+.st-matched { background: #dcfce7; color: #15803d; }
+.st-possible { background: #fef9c3; color: #854d0e; }
+.st-missing { background: #fee2e2; color: #b91c1c; }
+.st-partial { background: #ffedd5; color: #c2410c; }
+.st-dup { background: #ede9fe; color: #6d28d9; }
+.st-other { background: #e2e8f0; color: #475569; }
+.badge-engine { background: #e0e7ff; color: #4338ca; }
+
+/* Engine SAP source toggle */
+.src-toggle { display: flex; gap: 20px; margin-bottom: 16px; }
+.src-toggle .radio { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer; }
+.src-toggle .radio input { width: 16px; height: 16px; }

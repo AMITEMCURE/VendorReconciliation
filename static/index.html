@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendor Reconciliation Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=70" />
+</head>
+<body>
+
+  <!-- ═══════════════ LOGIN PAGE (Firmway-style split layout) ═══════════════ -->
+  <div id="login-page">
+
+    <!-- Left brand panel -->
+    <aside class="login-brand-panel">
+
+      <div class="lbp-copy">
+        <h1 class="lbp-title">Vendor Reconciliation, made effortless.</h1>
+        <p class="lbp-sub">Match SAP open items against vendor statements in minutes. Accurate, auditable, automated.</p>
+        <ul class="lbp-points">
+          <li>Automated SAP vs. vendor statement matching</li>
+          <li>18-rule reconciliation engine with configurable tolerances</li>
+          <li>Full history &amp; one-click Excel exports</li>
+        </ul>
+      </div>
+      <p class="lbp-foot">Digital Transformation Initiative by Treasury &amp; IT Team</p>
+    </aside>
+
+    <!-- Right login form -->
+    <main class="login-form-panel">
+      <div class="login-card">
+        <div class="login-card-logo">
+          <img src="EmcureLogo.png" alt="Emcure — cure and beyond" class="login-card-logo-img" />
+          <div class="lcl-name">MatchFlow</div>
+          <div class="lcl-sep">_</div>
+          <div class="lcl-sub">Vendor Reconciliation</div>
+          <div class="lcl-tag">Automated reconciliation workflows</div>
+        </div>
+        <div class="login-card-head">
+          <h2 class="login-heading">Sign in to your account</h2>
+        </div>
+
+        <div id="login-error" class="login-error"></div>
+
+        <div class="form-group">
+          <label class="login-label" for="login-username">Username</label>
+          <input class="login-input" id="login-username" placeholder="Enter your username" autocomplete="username" />
+        </div>
+
+        <div class="form-group">
+          <label class="login-label" for="login-password">Password</label>
+          <div class="pwd-wrap">
+            <input class="login-input" id="login-password" type="password" placeholder="Enter your password" autocomplete="current-password" />
+            <span onclick="toggleLoginPwd()" id="pwd-eye" class="pwd-eye" role="button" aria-label="Show password">&#128065;</span>
+          </div>
+        </div>
+
+        <div class="login-options">
+          <label class="remember">
+            <input type="checkbox" id="login-remember" /> <span>Remember me</span>
+          </label>
+          <a href="#" class="forgot-link" onclick="return false;">Forgot password?</a>
+        </div>
+
+        <button class="login-btn" onclick="doLogin()" id="login-btn">Sign In</button>
+
+        <div class="login-divider"><span>or</span></div>
+
+        <button class="sso-btn" type="button" onclick="return false;" title="Single sign-on (coming soon)">
+          <span class="sso-ico">&#128273;</span> Sign in with SSO
+        </button>
+
+        <p class="login-foot">Emcure Group — Vendor Reconciliation through SAP</p>
+      </div>
+    </main>
+  </div>
+
+  <!-- ═══════════════ MAIN APP ═══════════════ -->
+  <div id="app-wrapper" class="hidden">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">VR</div>
+        <svg style="height:40px;width:auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 120" fill="none">
+          <text x="8" y="58" font-family="Arial,Helvetica,sans-serif" font-size="58" font-weight="900" fill="#E31E25">Emcure</text>
+          <line x1="70" y1="70" x2="272" y2="70" stroke="#222" stroke-width="2.5"/>
+          <text x="8" y="105" font-family="Arial,Helvetica,sans-serif" font-size="28" font-weight="700" fill="#222">cure</text>
+          <text x="8" y="118" font-family="Arial,Helvetica,sans-serif" font-size="13" font-weight="400" fill="#555">and</text>
+          <text x="70" y="112" font-family="Arial,Helvetica,sans-serif" font-size="38" font-weight="900" fill="#222">beyond</text>
+        </svg>
+        <span class="brand-tag">Vendor Reconciliation Portal<span class="brand-tagline">Reconciliation in one click</span></span>
+      </div>
+      <div class="nav-user">
+        <span id="sapStatus" class="badge badge-muted">Checking SAP&hellip;</span>
+        <div class="user-name" id="user-name">Hi, Admin</div>
+        <div class="user-avatar" id="user-avatar">A</div>
+        <button class="btn btn-ghost btn-sm" data-nav="settings" onclick="showPage('settings')">⚙ Settings</button>
+        <button class="btn btn-secondary btn-sm" onclick="doLogout()">Logout</button>
+      </div>
+    </header>
+
+    <div class="body-layout">
+      <!-- Vertical side navigation -->
+      <aside class="sidenav" id="navTabs">
+        <div class="sidenav-inner">
+          <button class="nav-tab active" data-nav="home" onclick="showHome()">Home</button>
+          <button class="nav-tab" data-nav="vendorData" onclick="showPage('vendorData')">Data Upload</button>
+          <button class="nav-tab" data-nav="history" onclick="showPage('history')">History</button>
+          <button class="nav-tab" data-nav="reconDetail" onclick="showPage('reconDetail')">Reconciliation</button>
+        </div>
+      </aside>
+
+    <main class="wrap">
+
+      <!-- ══════════ LANDING: 4 CARDS ══════════ -->
+      <div id="page-home" class="page">
+        <section class="home-hero">
+          <h1 class="home-title">Vendor Reconciliation Portal</h1>
+          <p class="home-sub">Choose what you'd like to do.</p>
+        </section>
+        <div class="home-cards">
+          <button class="home-card" onclick="showPage('vendorData')">
+            <div class="hc-ico">&#128229;</div>
+            <div class="hc-title">Data Upload</div>
+            <div class="hc-desc">Fetch SAP open items for one or more vendor codes.</div>
+          </button>
+          <button class="home-card" onclick="showPage('history')">
+            <div class="hc-ico">&#128340;</div>
+            <div class="hc-title">Reconciliation History</div>
+            <div class="hc-desc">Review and re-export your previous runs.</div>
+          </button>
+          <button class="home-card" onclick="showPage('settings')">
+            <div class="hc-ico">&#9881;</div>
+            <div class="hc-title">Settings</div>
+            <div class="hc-desc">Tune engine tolerances, thresholds and rules.</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- ══════════ PAGE 1: DATA UPLOAD ══════════ -->
+      <div id="page-vendorData" class="page hidden">
+        <section class="card">
+          <h2>Data Upload — SAP data &amp; vendor statement</h2>
+
+          <!-- SAP source: fetch live or upload an Excel manually -->
+          <div class="src-toggle">
+            <label class="radio"><input type="radio" name="sapSrc" value="fetch" checked onchange="setSapSource('fetch')" /> Fetch from SAP</label>
+            <label class="radio"><input type="radio" name="sapSrc" value="upload" onchange="setSapSource('upload')" /> Upload SAP data (Excel)</label>
+          </div>
+
+          <!-- Manual SAP Excel upload -->
+          <div id="sapUploadBox" class="hidden">
+            <p class="tpl-intro">
+              Upload a SAP ledger file (Excel/CSV). It will be shown on screen below.
+              <a href="#" onclick="downloadEngineTemplate('sap','xlsx');return false;">Download SAP template</a>.
+            </p>
+            <div class="form-grid" style="grid-template-columns:180px 220px 340px">
+              <label>
+                Company code <span class="req-star">*</span>
+                <input id="companyCodeUp" type="text" list="companyCodeList" placeholder="e.g. EPL" autocomplete="off" required />
+              </label>
+              <label>
+                Vendor name <span class="req-star">*</span>
+                <input id="vendorNameUp2" type="text" placeholder="e.g. ABC Pharma Pvt Ltd" autocomplete="off" required />
+              </label>
+              <label class="file-field" style="grid-column:auto">
+                SAP data file (Excel / CSV) <span class="req-star">*</span>
+                <input id="sapUploadFile" type="file" accept=".xlsx,.xls,.csv,.txt" />
+              </label>
+            </div>
+            <div class="actions">
+              <button id="loadSapBtn" class="btn btn-primary" onclick="loadSapFile()">Load &amp; preview SAP data</button>
+            </div>
+            <p id="sapUploadMsg" class="message"></p>
+          </div>
+
+          <!-- Live SAP fetch -->
+          <div id="sapFetchBox">
+          <p class="tpl-intro">
+            Enter one or more vendor codes to pull their data from SAP. You can enter
+            <strong>multiple codes at once</strong> using the Multiple tab, or paste a column of codes.
+          </p>
+          <div class="form-grid" style="grid-template-columns:180px 220px 150px 150px 150px">
+            <label>
+              Company code <span class="req-star">*</span>
+              <input id="companyCode" type="text" list="companyCodeList" placeholder="Type or select, e.g. EPL" autocomplete="off" required />
+              <datalist id="companyCodeList">
+                <option value="EAU"></option>
+                <option value="EBL"></option>
+                <option value="EBT"></option>
+                <option value="ELPL"></option>
+                <option value="EMCT"></option>
+                <option value="EMN"></option>
+                <option value="EMX"></option>
+                <option value="ENL"></option>
+                <option value="ENZ"></option>
+                <option value="EPC"></option>
+                <option value="EPDR"></option>
+                <option value="EPE"></option>
+                <option value="EPL"></option>
+                <option value="EPP"></option>
+                <option value="ESA"></option>
+                <option value="EUK"></option>
+                <option value="EWPL"></option>
+                <option value="LPK"></option>
+                <option value="MNPI"></option>
+                <option value="MPI"></option>
+                <option value="TII"></option>
+                <option value="TIL"></option>
+                <option value="TIM"></option>
+                <option value="ZHL"></option>
+              </datalist>
+            </label>
+            <label>
+              Vendor name <span class="req-star">*</span>
+              <input id="vendorNameUp" type="text" placeholder="e.g. ABC Pharma Pvt Ltd" autocomplete="off" required />
+            </label>
+            <label>
+              Financial year
+              <select id="finYear" onchange="applyFinYear()">
+                <option value="">— Select FY —</option>
+              </select>
+            </label>
+            <label>
+              Date from
+              <input id="dateFrom" type="date" />
+            </label>
+            <label>
+              Date to
+              <input id="dateTo" type="date" />
+            </label>
+          </div>
+
+          <h3 class="tpl-h3" style="margin-top:18px">Vendor codes</h3>
+          <div class="vmode-tabs">
+            <button class="vmode-tab active" data-vmode="single" onclick="setVendorMode('single')">Single</button>
+            <button class="vmode-tab" data-vmode="multiple" onclick="setVendorMode('multiple')">Multiple</button>
+          </div>
+          <p class="tpl-note" id="vmodeHint" style="margin-top:0 0 10px">
+            Single vendor code. Switch to <strong>Multiple</strong> to enter up to 12 codes (paste a column from Excel).
+          </p>
+          <div id="vendorInputHost"></div>
+
+          <div class="actions">
+            <button id="fetchDataBtn" class="btn btn-primary" onclick="fetchVendorData()">Fetch data &rarr;</button>
+          </div>
+          </div><!-- /sapFetchBox -->
+
+          <div class="actions">
+            <button id="exportDataBtn" class="btn btn-ghost hidden" onclick="exportVendorData()">Export to Excel</button>
+          </div>
+          <p id="dataMessage" class="message"></p>
+        </section>
+
+        <section id="vendorSummarySection" class="card hidden">
+          <h2>Per-vendor summary</h2>
+          <div class="table-scroll" id="vendorSummaryHost"></div>
+        </section>
+
+        <section id="dataTableSection" class="card hidden">
+          <div class="summary-head">
+            <h2 id="dataTableTitle">SAP data</h2>
+          </div>
+          <div class="table-scroll" id="dataTableHost"></div>
+        </section>
+
+        <!-- Vendor statement upload + reconcile -->
+        <section id="vendorStmtSection" class="card hidden">
+          <h2>Vendor statement &amp; reconciliation</h2>
+          <p class="tpl-intro">
+            Upload the vendor's statement (Excel/CSV), then click <strong>Reconcile</strong>.
+            The result is saved to <strong>Reconciliation History</strong>.
+            <a href="#" onclick="downloadEngineTemplate('vendor','xlsx');return false;">Download vendor statement template</a>.
+          </p>
+          <div class="form-grid" style="grid-template-columns:360px">
+            <label class="file-field" style="grid-column:auto">
+              Vendor statement (Excel / CSV)
+              <input id="vendorStmtFile" type="file" accept=".xlsx,.xls,.csv,.txt" />
+            </label>
+          </div>
+          <div class="actions">
+            <button id="reconcileNowBtn" class="btn btn-primary" onclick="runReconciliation()">Reconcile &rarr;</button>
+          </div>
+          <p id="reconMsg" class="message"></p>
+        </section>
+      </div>
+
+      <!-- ══════════ PAGE 2: RECONCILIATION ══════════ -->
+      <div id="page-reconciliation" class="page hidden">
+        <section class="card">
+          <h2>Reconciliation Summary — SAP vs. vendor statement</h2>
+          <div class="form-grid">
+            <label>
+              Vendor code
+              <input id="vendor" type="text" placeholder="e.g. 104741" autocomplete="off" />
+            </label>
+            <label>
+              Company code
+              <input id="companyCode2" type="text" placeholder="defaults to server setting" autocomplete="off" />
+            </label>
+            <label class="file-field">
+              Vendor statement (Excel / CSV)
+              <input id="statement" type="file" accept=".xlsx,.xls,.csv,.txt" />
+            </label>
+          </div>
+          <div class="actions">
+            <button id="previewBtn" class="btn btn-ghost">Preview SAP open items</button>
+            <button id="reconcileBtn" class="btn btn-primary">Reconcile &rarr;</button>
+          </div>
+          <p id="message" class="message"></p>
+        </section>
+
+        <section id="sapItemsSection" class="card hidden">
+          <div class="summary-head">
+            <h2 id="sapItemsTitle">SAP open items</h2>
+            <button id="exportSapBtn" class="btn btn-ghost">Export to Excel</button>
+          </div>
+          <div class="table-scroll" id="sapItemsHost"></div>
+        </section>
+
+        <section id="reconEmpty" class="card">
+          <div class="empty">
+            No reconciliation yet. Enter a vendor code, upload the statement, and click <strong>Reconcile</strong>.
+          </div>
+        </section>
+
+        <section id="summarySection" class="card hidden">
+          <div class="summary-head">
+            <h2>Reconciliation summary</h2>
+            <button id="exportBtn" class="btn btn-ghost">Export to Excel</button>
+          </div>
+          <p id="vendorLine" class="vendor-line"></p>
+          <div class="stat-grid" id="statGrid"></div>
+          <div id="warnings" class="warnings"></div>
+        </section>
+
+        <section id="tablesSection" class="hidden">
+          <div class="tabs" id="tabs">
+            <button class="tab active" data-tab="matched">Matched</button>
+            <button class="tab" data-tab="amount_mismatch">Amount Mismatch</button>
+            <button class="tab" data-tab="only_in_sap">Invoice Missing in SAP</button>
+            <button class="tab" data-tab="only_in_vendor">Missing in Vendor</button>
+          </div>
+          <div class="card table-card">
+            <div id="tableHost"></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ══════════ PAGE: TRANSACTION RECONCILIATION ══════════ -->
+      <div id="page-txnRecon" class="page hidden">
+        <section class="card">
+          <h2>Transaction reconciliation — full vendor ledger</h2>
+          <p class="tpl-intro">
+            Upload the vendor's <strong>full ledger</strong> for the period (opening balance, invoices,
+            payments, credit/debit notes, closing balance). We verify the ledger balances
+            (<em>Opening + Debits &minus; Credits = Closing</em>) and group transactions by type.
+            Download the ledger format from the <strong>Upload Template</strong> tab.
+          </p>
+          <div class="form-grid">
+            <label>
+              Vendor code (optional)
+              <input id="txnVendor" type="text" placeholder="e.g. 104741" autocomplete="off" />
+            </label>
+            <label class="file-field">
+              Vendor ledger (Excel / CSV)
+              <input id="txnLedger" type="file" accept=".xlsx,.xls,.csv,.txt" />
+            </label>
+          </div>
+          <div class="actions">
+            <button id="txnAnalyzeBtn" class="btn btn-primary">Analyze ledger</button>
+          </div>
+          <p id="txnMessage" class="message"></p>
+          <div id="txnSapNote" class="warn hidden" style="margin-top:12px"></div>
+        </section>
+
+        <section id="txnBridgeSection" class="card hidden">
+          <div class="summary-head"><h2>Balance bridge</h2><span id="txnBalancedBadge" class="badge"></span></div>
+          <div class="stat-grid" id="txnBridgeStats"></div>
+          <div id="txnWarnings" class="warnings"></div>
+        </section>
+
+        <section id="txnByTypeSection" class="card hidden">
+          <h2>Transactions by type</h2>
+          <div class="table-scroll" id="txnByTypeHost"></div>
+        </section>
+
+        <section id="txnLinesSection" class="card hidden">
+          <h2>All transactions</h2>
+          <div class="table-scroll" id="txnLinesHost"></div>
+        </section>
+      </div>
+
+      <!-- ══════════ PAGE: ENGINE RECONCILIATION ══════════ -->
+      <div id="page-engine" class="page hidden">
+        <section class="card">
+          <h2>Engine reconciliation — SAP ledger vs vendor statement</h2>
+          <p class="tpl-intro">
+            Upload a <strong>SAP vendor ledger</strong> file and a <strong>vendor statement</strong> file.
+            The 18-rule engine classifies every transaction (Matched, Possible Match, Partial,
+            Missing, Duplicate, Exception) using the tolerances configured on the <strong>Settings</strong> tab.
+            Source data is never modified; nothing is posted or cleared.
+          </p>
+          <div class="src-toggle">
+            <label class="radio"><input type="radio" name="engSapSrc" value="live" checked onchange="engToggleSource()" /> Fetch from SAP (live)</label>
+            <label class="radio"><input type="radio" name="engSapSrc" value="file" onchange="engToggleSource()" /> Upload SAP file</label>
+          </div>
+          <div class="form-grid">
+            <label id="engVendorCodeWrap">
+              SAP vendor code
+              <input id="engVendorCode" type="text" placeholder="e.g. 104741" autocomplete="off" />
+            </label>
+            <label id="engCompanyWrap">
+              Company code
+              <input id="engCompanyCode" type="text" placeholder="defaults to server setting" autocomplete="off" />
+            </label>
+            <label class="file-field hidden" id="engSapFileWrap">
+              SAP ledger (Excel / CSV)
+              <input id="engSapFile" type="file" accept=".xlsx,.xls,.csv,.txt" />
+            </label>
+            <label class="file-field">
+              Vendor statement (Excel / CSV)
+              <input id="engVendorFile" type="file" accept=".xlsx,.xls,.csv,.txt" />
+            </label>
+          </div>
+          <div class="actions">
+            <button id="engRunBtn" class="btn btn-primary">Run engine</button>
+          </div>
+          <p id="engMessage" class="message"></p>
+
+          <hr class="tpl-divider" />
+          <h3 class="tpl-h3">Templates</h3>
+          <p class="tpl-note" style="margin-top:0">Download the expected file formats. The parser also
+            accepts common header aliases, but these show the exact columns the engine reads.</p>
+          <div class="actions" style="flex-wrap:wrap">
+            <button id="engSapTplXlsxBtn" class="btn btn-ghost">&darr; SAP ledger template (Excel)</button>
+            <button id="engSapTplCsvBtn" class="btn btn-ghost">&darr; SAP ledger template (CSV)</button>
+            <button id="engVenTplXlsxBtn" class="btn btn-ghost">&darr; Vendor statement template (Excel)</button>
+            <button id="engVenTplCsvBtn" class="btn btn-ghost">&darr; Vendor statement template (CSV)</button>
+          </div>
+        </section>
+
+        <section id="engSummarySection" class="card hidden">
+          <div class="summary-head">
+            <h2>Result</h2>
+            <span id="engFinalStatus" class="badge"></span>
+          </div>
+          <p id="engVendorLine" class="vendor-line"></p>
+          <div class="stat-grid" id="engStatGrid"></div>
+        </section>
+
+        <section id="engResultsSection" class="hidden">
+          <div class="card" style="padding:16px 22px">
+            <div class="hist-filters">
+              <label>Filter by status
+                <select id="engStatusFilter"><option value="">All statuses</option></select>
+              </label>
+              <span id="engResultCount" class="vendor-line" style="margin:0"></span>
+            </div>
+          </div>
+          <div class="card table-card">
+            <div class="table-scroll" id="engResultsHost"></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- ══════════ PAGE: SETTINGS ══════════ -->
+      <div id="page-settings" class="page hidden">
+        <section class="card">
+          <div class="summary-head">
+            <h2>Engine settings — tolerances &amp; rules</h2>
+            <div>
+              <button id="cfgSaveBtn" class="btn btn-primary btn-sm">Save settings</button>
+              <button id="cfgReloadBtn" class="btn btn-ghost btn-sm">Reload</button>
+            </div>
+          </div>
+          <p class="tpl-intro">All reconciliation tolerances and rule toggles are configurable here.
+            Changes apply to the next engine run.</p>
+          <p id="cfgMessage" class="message"></p>
+
+          <h3 class="tpl-h3">Tolerances</h3>
+          <div class="cfg-grid" id="cfgTolerances"></div>
+
+          <h3 class="tpl-h3" style="margin-top:20px">Confidence thresholds</h3>
+          <div class="cfg-grid" id="cfgThresholds"></div>
+
+          <h3 class="tpl-h3" style="margin-top:20px">Rule toggles</h3>
+          <div class="cfg-toggles" id="cfgToggles"></div>
+        </section>
+
+        <section class="card">
+          <h2>Reconciliation rules reference (18 rules)</h2>
+          <p class="tpl-intro">The engine runs these rules in this exact priority order. A transaction
+            matched by a higher-priority rule is never re-matched by a lower one. Nothing is posted,
+            cleared, deleted or reversed — the engine only classifies.</p>
+          <div class="table-scroll" style="max-height:none" id="rulesRefHost"></div>
+        </section>
+      </div>
+
+      <!-- ══════════ PAGE: RECONCILIATION HISTORY ══════════ -->
+      <div id="page-history" class="page hidden">
+        <section class="card">
+          <div class="summary-head">
+            <h2>My reconciliation history</h2>
+            <div style="display:flex;gap:8px">
+              <button id="histRefreshBtn" class="btn btn-ghost btn-sm">Refresh</button>
+              <button id="histClearAllBtn" class="btn btn-danger btn-sm" onclick="clearHistory()">Clear History</button>
+            </div>
+          </div>
+          <div class="hist-filters">
+            <label>From
+              <input id="histFrom" type="date" />
+            </label>
+            <label>To
+              <input id="histTo" type="date" />
+            </label>
+            <button id="histApplyBtn" class="btn btn-primary btn-sm">Apply</button>
+            <button id="histClearBtn" class="btn btn-ghost btn-sm">Clear</button>
+          </div>
+          <div class="table-scroll" id="histHost"></div>
+        </section>
+      </div>
+
+      <!-- ══════════ PAGE: RECONCILIATION DETAIL (opened from History ▸ View) ══════════ -->
+      <div id="page-reconDetail" class="page hidden">
+        <section id="histDetailSection" class="card">
+          <div class="summary-head">
+            <h2 id="histDetailTitle">Run detail</h2>
+            <div>
+              <button id="histDetailBackBtn" class="btn btn-ghost btn-sm" onclick="showPage('history')">← Back to History</button>
+              <button id="histDetailExportBtn" class="btn btn-ghost btn-sm">Export to Excel</button>
+            </div>
+          </div>
+          <p id="histDetailLine" class="vendor-line"></p>
+          <div id="histDetailStats"></div>
+          <div class="tabs" id="histDetailTabs">
+            <button class="tab active" data-htab="matched">Matched</button>
+            <button class="tab" data-htab="amount_mismatch">Amount Mismatch</button>
+            <button class="tab" data-htab="only_in_sap">Invoice Missing in SAP</button>
+            <button class="tab" data-htab="only_in_vendor">Missing in Vendor</button>
+          </div>
+          <div class="table-scroll" id="histDetailHost"></div>
+        </section>
+        <section id="reconDetailEmpty" class="card hidden">
+          <div class="empty">Open the <strong>History</strong> tab and click <strong>View</strong> on a run to see its reconciliation detail here.</div>
+        </section>
+      </div>
+
+      <!-- ══════════ PAGE 3: UPLOAD TEMPLATE ══════════ -->
+      <div id="page-template" class="page hidden">
+        <section class="card">
+          <h2>Vendor statement upload template</h2>
+          <p class="tpl-intro">
+            Share this template with your vendor. They fill in one row per open invoice and send it back.
+            You then upload the completed file on the <strong>Vendor Data</strong> page to reconcile it against SAP.
+          </p>
+
+          <h3 class="tpl-h3">Required columns</h3>
+          <div class="table-scroll" style="max-height:none">
+            <table>
+              <thead>
+                <tr><th>Column</th><th>Required</th><th>Description / Example</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><strong>Invoice No</strong></td><td>Yes</td><td>The vendor's invoice number, e.g. <code>081/EXT/2026</code></td></tr>
+                <tr><td><strong>Amount</strong></td><td>Yes</td><td>Invoice amount, e.g. <code>53.45</code> (commas and currency symbols are handled)</td></tr>
+                <tr><td><strong>Invoice Date</strong></td><td>Optional</td><td>Format <code>dd-mm-yyyy</code>, e.g. <code>17-03-2026</code></td></tr>
+                <tr><td><strong>Currency</strong></td><td>Optional</td><td>e.g. <code>USD</code></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tpl-note">
+            Column names are flexible &mdash; the parser also recognises common aliases like
+            "Invoice Number", "Bill No", "Value", "Debit", "Date". Invoice No and Amount must be present.
+          </p>
+
+          <div class="actions">
+            <button id="tplXlsxBtn" class="btn btn-primary">&darr; Download Excel template</button>
+            <button id="tplCsvBtn" class="btn btn-ghost">&darr; Download CSV template</button>
+          </div>
+
+          <hr class="tpl-divider" />
+
+          <h2 style="margin-top:8px">Transaction ledger template (full ledger)</h2>
+          <p class="tpl-intro">
+            For <strong>Transaction Reconciliation</strong>. The vendor lists every transaction for the
+            period — opening balance, invoices, payments, credit/debit notes, and closing balance.
+          </p>
+          <h3 class="tpl-h3">Columns</h3>
+          <div class="table-scroll" style="max-height:none">
+            <table>
+              <thead><tr><th>Column</th><th>Required</th><th>Description / Example</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Date</strong></td><td>Recommended</td><td>Format <code>dd-mm-yyyy</code>, e.g. <code>05-03-2026</code></td></tr>
+                <tr><td><strong>Transaction Type</strong></td><td>Yes</td><td><code>Opening Balance</code>, <code>Invoice</code>, <code>Payment</code>, <code>Credit Note</code>, <code>Debit Note</code>, <code>Closing Balance</code></td></tr>
+                <tr><td><strong>Reference No</strong></td><td>Recommended</td><td>Invoice / payment / document number, e.g. <code>081/EXT/2026</code></td></tr>
+                <tr><td><strong>Debit</strong></td><td>Yes*</td><td>Increases payable (invoices, debit notes), e.g. <code>53.45</code></td></tr>
+                <tr><td><strong>Credit</strong></td><td>Yes*</td><td>Decreases payable (payments, credit notes), e.g. <code>5000.00</code></td></tr>
+                <tr><td><strong>Currency</strong></td><td>Optional</td><td>e.g. <code>USD</code></td></tr>
+                <tr><td><strong>Narration</strong></td><td>Optional</td><td>Free text remarks</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tpl-note">*Provide Debit and Credit columns (a single signed <code>Amount</code> column also works: positive = debit, negative = credit). Opening/Closing balance go in the Debit column as a single figure.</p>
+          <div class="actions">
+            <button id="txnTplXlsxBtn" class="btn btn-primary">&darr; Download ledger Excel template</button>
+            <button id="txnTplCsvBtn" class="btn btn-ghost">&darr; Download ledger CSV template</button>
+          </div>
+        </section>
+      </div>
+
+    </main>
+    </div><!-- /body-layout -->
+  </div>
+
+  <script src="app.js?v=62"></script>
+</body>
+</html>
